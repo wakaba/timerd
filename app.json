@@ -1,0 +1,14 @@
+{
+  "name": "timerd",
+  "repository": "https://github.com/wakaba/timerd",
+  "buildpacks": [
+    {"url": "https://github.com/wakaba/heroku-buildpack-perl-pmbp"}
+  ],
+  "env": {
+    "APP_API_KEY": {"description": "API key (|key| parameter value)", "generator": "string"},
+    "CLEARDB_CERT": {"description": "ClearDB CA certificate (.pem file content)"}
+  },
+  "addons": [
+    "cleardb"
+  ]
+}

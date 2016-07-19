@@ -12,7 +12,13 @@ updatenightly: local/bin/pmbp.pl
 
 ## ------ Setup ------
 
-deps: git-submodules pmbp-install
+deps: always
+	true # dummy for make -q
+ifdef PMBP_HEROKU_BUILDPACK
+else
+	$(MAKE) git-submodules
+endif
+	$(MAKE) pmbp-install
 
 git-submodules:
 	$(GIT) submodule update --init
@@ -31,6 +37,9 @@ pmbp-install: pmbp-upgrade
             --create-perl-command-shortcut @perl \
             --create-perl-command-shortcut @prove \
             --create-perl-command-shortcut @plackup=perl\ modules/twiggy-packed/script/plackup
+
+build-heroku:
+	echo "$$CLEARDB_CERT" > local/cleardb-ca.pem
 
 ## ------ Tests ------
 
