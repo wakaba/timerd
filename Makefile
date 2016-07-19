@@ -38,6 +38,17 @@ pmbp-install: pmbp-upgrade
             --create-perl-command-shortcut @prove \
             --create-perl-command-shortcut @plackup=perl\ modules/twiggy-packed/script/plackup
 
+create-commit-for-heroku:
+	git remote rm origin
+	rm -fr deps/pmtar/.git deps/pmpp/.git modules/*/.git
+	git add -f deps/pmtar/* #deps/pmpp/*
+	rm -fr ./t_deps/modules
+	git rm .gitmodules
+	git rm -r t_deps/modules
+	git rm modules/* --cached
+	git add -f modules/*/*
+	git commit -m "for heroku"
+
 build-heroku:
 	echo "$$CLEARDB_CERT" > local/cleardb-ca.pem
 

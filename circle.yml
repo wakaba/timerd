@@ -1,0 +1,30 @@
+dependencies:
+  override:
+    - git config --global user.email "temp@circleci.test"
+    - git config --global user.name "CircleCI"
+    - make deps
+test:
+  override:
+    - make test
+    - echo '{}' > config.json
+    - APP_CONFIG=config.json ./plackup -p 5114 -t Twiggy bin/server.psgi :
+        background: true
+    - sleep 10
+    - curl http://localhost:5114
+deployment:
+  heroku:
+    branch: master
+    commands:
+      - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+      - make create-commit-for-heroku
+      - git push git@heroku.com:$HEROKU_APP_NAME.git +`git rev-parse HEAD`:refs/heads/master
+
+  nightly:
+    branch: nightly
+    commands:
+      - curl -f -s -S --request POST --header "Authorization:token $GITHUB_ACCESS_TOKEN" --header "Content-Type:application/json" --data-binary "{\"base\":\"master\",\"head\":\"`git rev-parse HEAD`\",\"commit_message\":\"auto-merge nightly into master\"}" "https://api.github.com/repos/wakaba/timerd/merges"
+
+  staging:
+    branch: staging
+    commands:
+      - curl -f -s -S --request POST --header "Authorization:token $GITHUB_ACCESS_TOKEN" --header "Content-Type:application/json" --data-binary "{\"base\":\"master\",\"head\":\"`git rev-parse HEAD`\",\"commit_message\":\"auto-merge staging into master\"}" "https://api.github.com/repos/wakaba/timerd/merges"
