@@ -1,0 +1,12 @@
+
+- "../../modules/twiggy-packed" build tests
+- "../../modules/dongry" build tests dbi datetime mp
+- "../../modules/json-functions-xs" build tests
+- "../../modules/ooutils" build tests classdiamondgenerator classregistry objectcachesmethod operationresponse
+- "../../modules/json-ps" build tests
+- "../../modules/anyevent-mysql-client" build tests
+- "../../modules/wanage" build tests mp datetime
+- "../../modules/charclass" build tests
+- "../../modules/web-encodings" build tests
+- "../../modules/web-url" build tests
+- "../../modules/promise" build tests
