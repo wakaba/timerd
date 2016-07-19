@@ -44,7 +44,7 @@ create-commit-for-heroku:
 	git add -f deps/pmtar/* #deps/pmpp/*
 	rm -fr ./t_deps/modules
 	git rm .gitmodules
-	git rm -r t_deps/modules
+	#git rm -r t_deps/modules
 	git rm modules/* --cached
 	git add -f modules/*/*
 	git commit -m "for heroku"
