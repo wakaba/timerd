@@ -73,13 +73,24 @@ create table if not exists `task` (
   key (`url`)
 ) default charset=binary engine=innodb
       })->then (sub {
-        return $db->insert ('task', [{
-          at => 0+$at,
-          url => Dongry::Type->serialize ('text', $url->stringify),
-          method => Dongry::Type->serialize ('text', $method),
-        }], duplicate => 'replace');
-      })->then (sub {
-        return $app->throw_error (204, reason_phrase => 'Scheduled');
+        my $cancel = $app->bare_param ('cancel');
+        if ($cancel) {
+          return $db->delete ('task', {
+            at => 0+$at,
+            url => Dongry::Type->serialize ('text', $url->stringify),
+            method => Dongry::Type->serialize ('text', $method),
+          })->then (sub {
+            return $app->send_plain_text ($_[0]->row_count);
+          });
+        } else {
+          return $db->insert ('task', [{
+            at => 0+$at,
+            url => Dongry::Type->serialize ('text', $url->stringify),
+            method => Dongry::Type->serialize ('text', $method),
+          }], duplicate => 'replace')->then (sub {
+            return $app->throw_error (204, reason_phrase => 'Scheduled');
+          });
+        }
       });
     }
   }
