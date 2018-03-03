@@ -1,0 +1,14 @@
+{
+  "circleci": {
+    "pmbp": 1,
+    "heroku": 1,
+    "merger": 1,
+    "gaa": 1,
+    "tests": [
+      {"APP_API_KEY=hoge CLEARDB_DATABASE_URL=mysql://a:b@c/d?x CLEARDB_CERT_FILE=foo.pem ./plackup -p 5114 -t Twiggy bin/server.psgi":
+         {"background": true}},
+      "sleep 10",
+      "curl http://localhost:5114"
+    ]
+  }
+}
